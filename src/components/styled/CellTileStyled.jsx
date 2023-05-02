@@ -17,8 +17,10 @@ export const StyledTile = styled.div`
   --bg-lightness: ${props => props.props.bgLightness}%;
   --text-lightness: ${props => props.props.bgLightness < 50 ? 90 : 10}%;
   position: absolute;
-  top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)));
-  left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)));
+  transform: translate(
+          calc(var(--x) * (var(--cell-size) + var(--cell-gap))),
+          calc(var(--y) * (var(--cell-size) + var(--cell-gap)))
+  );
   display: flex;
   justify-content: center;
   align-items: center;

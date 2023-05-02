@@ -1,3 +1,4 @@
+import React from 'react'
 import {useSelector} from "react-redux";
 
 import Cell from "./Cell";
@@ -5,16 +6,15 @@ import CellTile from "./CellTile";
 
 const Cells = () => {
     const game = useSelector(state => state.game);
+    const cells = Object.values(game.cells);
+
     return (
         <>
             {
-                game.cells.map((cell, i) => {
-                    if (i < game.gridCountTile){
-                        return <CellTile key={cell.id} {...cell}/>
-                    }else {
-                        return <Cell key={cell.id} {...cell}/>
-                    }
-                })
+                cells.map(cell => <React.Fragment key={cell.id}>
+                    <Cell {...cell}/>
+                    <CellTile {...cell}/>
+                </React.Fragment>)
             }
         </>
     );

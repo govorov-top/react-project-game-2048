@@ -1,9 +1,11 @@
 import GameField from "./components/GameField";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {generateCells, moveUp} from "./store/gameSlice";
+import {generateCells, moveRight, moveUp} from "./store/gameSlice";
+import {logDOM} from "@testing-library/react";
 
 const App = () => {
+    const game = useSelector(state => state.game);
     const dispatchAction = useDispatch();
 
     useEffect(()=>{
@@ -12,7 +14,7 @@ const App = () => {
 
     /*const [cells, setCells] = useState([]);
     const [isLoadedPlayField, setIsLoadedPlayField] = useState(false);*/
-
+    console.log(game.cells)
     useEffect(() => {
             const handleInput = (e) => {
                 switch (e.key) {
@@ -20,7 +22,7 @@ const App = () => {
                         dispatchAction(moveUp());
                         break;
                     case "ArrowRight" :
-                        //moveRight();
+                        dispatchAction(moveRight());
                         break;
                     case "ArrowLeft" :
                         //moveLeft();
@@ -31,52 +33,13 @@ const App = () => {
                     default: return;
                 }
             }
-            /*const groupCellsByColumn = () => {
-                const cellsFiltered = cells.filter(cell => cell.type !== 'tile')
-                return cellsFiltered.reduce((groupCells, cell) => {
-                    groupCells[cell.x] = groupCells[cell.x] || [];
-                    groupCells[cell.x][cell.y] = cell;
-                    return groupCells;
-                }, [])
-            }
-            const moveUp = () => {
-                slideTiles(groupCellsByColumn());
-            }
-            const slideTiles = (groupedCells) => {
-                groupedCells.forEach(group => slideTilesInGroup(group))
-            }
-            const slideTilesInGroup = (group) => {
-
-                for (let i = 1; i < group.length; i++) {
-                    if (group[i].isEmpty) continue;
-
-                    const cellWithTile = group[i];
-
-                    let targetCell;
-                    let j = i - 1;
-                    console.log(group[j])
-                    while (j >= 0 && group[j].canAccept(cellWithTile.linkedTile)){
-                        targetCell = group[j];
-                        j--;
-                    }
-
-                    if (!targetCell) continue;
-
-                    if (targetCell.isEmpty){
-                        targetCell.linkTile(cellWithTile.linkedTile);
-                    }else {
-                        targetCell.linkTileForMerge(cellWithTile.linkedTile);
-                    }
-
-                    cellWithTile.unlinkTile();
-                }
-            }*/
 
             window.addEventListener("keydown", handleInput);
 
             return () => {
                 window.removeEventListener('keydown', handleInput);
             };
+
     }, [dispatchAction]);
 
     /*useEffect(() => {
