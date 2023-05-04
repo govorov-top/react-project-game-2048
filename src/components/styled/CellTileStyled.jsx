@@ -12,8 +12,8 @@ const show = keyframes`
 `;
 
 export const StyledTile = styled.div`
-  --y: ${props => props.props.y};
   --x: ${props => props.props.x};
+  --y: ${props => props.props.y};
   --bg-lightness: ${props => props.props.bgLightness}%;
   --text-lightness: ${props => props.props.bgLightness < 50 ? 90 : 10}%;
   position: absolute;

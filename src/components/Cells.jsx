@@ -5,16 +5,15 @@ import Cell from "./Cell";
 import CellTile from "./CellTile";
 
 const Cells = () => {
-    const game = useSelector(state => state.game);
-    const cells = Object.values(game.cells);
-
+    const cells = useSelector(state => state.game.cells);
+    const coordinateCells = useSelector(state => state.game.coordinateCells);
     return (
         <>
             {
-                cells.map(cell => <React.Fragment key={cell.id}>
-                    <Cell {...cell}/>
-                    <CellTile {...cell}/>
-                </React.Fragment>)
+                cells.flat().map(cell =>  <Cell key={cell.id} {...cell}/>)
+            }
+            {
+                Object.entries(coordinateCells).map(cell => <CellTile key={cell[1].id} {...cell[1]}/>)
             }
         </>
     );
