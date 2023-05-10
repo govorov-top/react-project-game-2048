@@ -1,19 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 
-const generateRandomCells = (state) => {
-    for (let i = 0; i < state.gridCountTile; i++) {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        if (state.coordinateCells){
-            const cell = state.coordinateCells[getRandomInt(1, state.gridSize - 1) + "_" +getRandomInt(1, state.gridSize - 1)];
-            console.log(cell)
-            if (cell.value === 0 ){
+const generateRandomCells = (cells,gridCountTile) => {
+    const getEmptyTiles = () => {
+       return cells.flat().filter(cell => !cell.value)
+    }
+    if (getEmptyTiles().length){
+        for (let i = 0; i < gridCountTile; i++) {
+            const emptyTiles = getEmptyTiles();
+            const randomIndex = Math.floor(Math.random() * emptyTiles.length);
+            const cell = cells.flat()[randomIndex];
+
+            if (!cell.value) {
                 cell.value = Math.random() < 0.5 ? 2 : 4;
-            }else {
-                generateRandomCells(state);
             }
         }
     }
+    return cells;
 };
 
 export const gameSlice = createSlice({
@@ -43,14 +46,15 @@ export const gameSlice = createSlice({
                 }
             }
 
+            state.cells = generateRandomCells(cells, state.gridCountTile);
+
             let newObj = {};
             cells.flat().forEach(el => newObj[el.id] = {...el});
-            state.coordinateCells = {...newObj}
-            state.cells = cells;
-            generateRandomCells(state)
+            state.coordinateCells = {...newObj};
         },
         moveUp: (state, action) => {
             const grid = state.cells;
+            console.log(JSON.parse(JSON.stringify(grid)))
             const gridSize = state.gridSize;
 
             let merged = new Array(gridSize).fill(false).map(() => new Array(gridSize).fill(false));
@@ -72,11 +76,11 @@ export const gameSlice = createSlice({
             // Шаг 3: Снова сдвиг всех чисел вверх после объединения
             slideUp(grid,gridSize);
 
-            let newObj = {};
-            state.cells.flat().forEach(el => newObj[el.id] = {...el});
-            state.coordinateCells = {...newObj}
+            state.cells = generateRandomCells(grid, state.gridCountTile);
 
-            generateRandomCells(state)
+            let newObj = {};
+            grid.flat().forEach(el => newObj[el.id] = {...el});
+            state.coordinateCells = {...newObj};
         },
         moveDown: (state, action) => {
             const grid = state.cells;
@@ -101,11 +105,11 @@ export const gameSlice = createSlice({
             // Шаг 3: Снова сдвиг всех чисел вниз после объединения
             slideDown(grid, gridSize);
 
-            let newObj = {};
-            state.cells.flat().forEach(el => newObj[el.id] = {...el});
-            state.coordinateCells = {...newObj};
+            state.cells = generateRandomCells(grid, state.gridCountTile);
 
-            generateRandomCells(state)
+            let newObj = {};
+            grid.flat().forEach(el => newObj[el.id] = {...el});
+            state.coordinateCells = {...newObj};
         },
         moveRight: (state, action) => {
             const grid = state.cells;
@@ -130,11 +134,11 @@ export const gameSlice = createSlice({
             // Шаг 3: Снова сдвиг всех чисел вправо после объединения
             slideRight(grid, gridSize);
 
-            let newObj = {};
-            state.cells.flat().forEach(el => newObj[el.id] = {...el});
-            state.coordinateCells = {...newObj};
+            state.cells = generateRandomCells(grid, state.gridCountTile);
 
-            generateRandomCells(state)
+            let newObj = {};
+            grid.flat().forEach(el => newObj[el.id] = {...el});
+            state.coordinateCells = {...newObj};
         },
         moveLeft: (state, action) => {
             const grid = state.cells;
@@ -159,11 +163,11 @@ export const gameSlice = createSlice({
             // Шаг 3: Снова сдвиг всех чисел влево после объединения
             slideLeft(grid, gridSize);
 
-            let newObj = {};
-            state.cells.flat().forEach(el => newObj[el.id] = {...el});
-            state.coordinateCells = {...newObj};
+            state.cells = generateRandomCells(grid, state.gridCountTile);
 
-            generateRandomCells(state)
+            let newObj = {};
+            grid.flat().forEach(el => newObj[el.id] = {...el});
+            state.coordinateCells = {...newObj};
         },
     },
 });
